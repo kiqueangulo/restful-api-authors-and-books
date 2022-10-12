@@ -50,6 +50,8 @@ const startServer = () => {
 
         return res.status(404).json({ message: error.message });
     });
+
+    http.createServer(router).listen(config.server.port, () => Logging.info(`Server is running on port ${config.server.port}.`));
 };
 
 /* Connect to Mongo */
