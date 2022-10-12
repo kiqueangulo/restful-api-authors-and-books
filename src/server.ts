@@ -1,6 +1,8 @@
 import express from 'express';
 import http from 'http';
 import mongoose from 'mongoose';
+
+import Logging from './library/Logging';
 import { config } from './config/config';
 
 const router = express();
@@ -9,8 +11,9 @@ const router = express();
 mongoose
     .connect(config.mongo.url, { retryWrites: true, w: 'majority' })
     .then(() => {
-        console.log('Connected to database');
+        Logging.info('Connected to database.');
     })
     .catch((error) => {
-        console.log(error);
+        Logging.error('Unable to connect: ');
+        Logging.error(error);
     });
