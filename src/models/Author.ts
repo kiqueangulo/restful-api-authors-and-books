@@ -5,3 +5,14 @@ export interface IAuthor {
 }
 
 export interface IAuthorModel extends IAuthor, Document {}
+
+const AuthorSchema = new Schema(
+    {
+        name: { type: String, require: true }
+    },
+    {
+        versionKey: false
+    }
+);
+
+export default mongoose.model<IAuthorModel>('Author', AuthorSchema);
