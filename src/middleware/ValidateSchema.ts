@@ -5,7 +5,7 @@ import Logging from '../library/Logging';
 import { IAuthor } from '../models/Author';
 import { IBook } from '../models/Book';
 
-export const ValidateSchema = (schema: ObjectSchema) => {
+export default function ValidateSchema(schema: ObjectSchema) {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await schema.validateAsync(req.body);
@@ -17,7 +17,7 @@ export const ValidateSchema = (schema: ObjectSchema) => {
             return res.status(422).json({ error });
         }
     };
-};
+}
 
 export const Schemas = {
     author: {
