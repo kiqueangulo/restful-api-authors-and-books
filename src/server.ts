@@ -3,6 +3,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 
 import Logging from './library/Logging';
+import authorRoutes from './routes/Author';
 import { config } from './config/config';
 
 const router = express();
@@ -37,7 +38,8 @@ const startServer = () => {
         next();
     });
 
-    /* The routes go here - skip for now */
+    /* Routes */
+    router.use('/authors', authorRoutes);
 
     /* Healthcheck */
     router.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
