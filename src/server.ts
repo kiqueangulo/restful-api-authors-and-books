@@ -36,6 +36,11 @@ const startServer = () => {
 
         next();
     });
+
+    /* The routes go here - skip for now */
+
+    /* Healthcheck */
+    router.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
 };
 
 /* Connect to Mongo */
