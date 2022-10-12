@@ -41,6 +41,15 @@ const startServer = () => {
 
     /* Healthcheck */
     router.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
+
+    /* Error handling */
+    router.use((req, res) => {
+        const error = new Error('Not found');
+
+        Logging.error(error);
+
+        return res.status(404).json({ message: error.message });
+    });
 };
 
 /* Connect to Mongo */
