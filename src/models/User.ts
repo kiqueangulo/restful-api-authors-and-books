@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { IBookModel } from './Book';
 
 export interface IUser {
-    name: string;
+    username: string;
     email: string;
     password: string;
     books: Array<IBookModel['_id']>;
@@ -12,7 +12,7 @@ export interface IUser {
 export interface IUserModel extends IUser, Document {}
 
 const UserSchema = new Schema({
-    name: { type: String, require: true },
+    username: { type: String, require: true },
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
     books: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
