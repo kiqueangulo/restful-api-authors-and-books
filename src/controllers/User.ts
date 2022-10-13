@@ -1,17 +1,21 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import { omit } from 'lodash';
 
 import User from '../models/User';
 
 const createUser = async (req: Request, res: Response) => {
-    const { username, email, password } = req.body;
+    try {
+        const { username, email, password } = req.body;
 
-    const user = new User({ _id: new mongoose.Types.ObjectId(), username, email, password });
+        const user = new User({ _id: new mongoose.Types.ObjectId(), username, email, password });
 
-    return user
-        .save()
-        .then((user) => res.status(201).json({ user }))
-        .catch((error) => res.status(500).json({ error }));
+        await user.save();
+
+        return res.status(201).send(omit(user.toJSON(), 'password'));
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
 const readUser = (req: Request, res: Response) => {
