@@ -7,13 +7,14 @@ export interface IUser {
     username: string;
     email: string;
     password: string;
+    passwordConfirmation: string;
     books: Array<IBookModel['_id']>;
 }
 
-export interface IUserModel extends IUser, Document {}
+export interface IUserModel extends Omit<IUser, 'passwordConfirmation'>, Document {}
 
 const UserSchema = new Schema({
-    username: { type: String, require: true },
+    username: { type: String, require: true, unique: true },
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
     books: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
