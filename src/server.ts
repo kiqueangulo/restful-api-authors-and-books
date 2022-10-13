@@ -3,6 +3,7 @@ import http from 'http';
 import mongoose from 'mongoose';
 
 import Logging from './library/Logging';
+import userRoutes from './routes/User';
 import authorRoutes from './routes/Author';
 import bookRoutes from './routes/Book';
 import { config } from './config/config';
@@ -40,6 +41,7 @@ const startServer = () => {
     });
 
     /* Routes */
+    router.use('/users', userRoutes);
     router.use('/authors', authorRoutes);
     router.use('/books', bookRoutes);
 
