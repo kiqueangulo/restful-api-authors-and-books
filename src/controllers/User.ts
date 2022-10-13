@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 import User from '../models/User';
 
-const createUser = (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 
     const user = new User({ _id: new mongoose.Types.ObjectId(), username, email, password });
