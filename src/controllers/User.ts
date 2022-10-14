@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 import { omit } from 'lodash';
+import mongoose from 'mongoose';
 
 import User from '../models/User';
 
@@ -18,37 +18,45 @@ const createUser = async (req: Request, res: Response) => {
     }
 };
 
-const readUser = (req: Request, res: Response) => {
-    const userId = req.params.userId;
+const readUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
 
-    return User.findById(userId)
-        .then((user) => (user ? res.status(200).json({ user }) : res.status(404).json({ message: 'Not found.' })))
-        .catch((error) => res.status(500).json({ error }));
+        return user ? res.status(200).json({ user }) : res.status(404).json({ message: 'Not found.' });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const readAllUsers = (req: Request, res: Response) => {
-    return User.find()
-        .then((users) => res.status(200).json({ users }))
-        .catch((error) => res.status(500).json({ error }));
+const readAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await User.find();
+
+        return res.status(200).json({ users });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const updateUser = (req: Request, res: Response) => {
-    const userId = req.params.userId;
+const updateUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
 
-    return User.findById(userId)
-        .then((user) => {
-            if (user) {
-                user.set(req.body);
+        const user = await User.findById(userId);
 
-                return user
-                    .save()
-                    .then((user) => res.status(201).json({ user }))
-                    .catch((error) => res.status(500).json({ error }));
-            } else {
-                res.status(404).json({ message: 'Not found.' });
-            }
-        })
-        .catch((error) => res.status(500).json({ error }));
+        if (user) {
+            user.set(req.body);
+
+            await user.save();
+
+            return res.status(201).json({ user });
+        } else {
+            return res.status(404).json({ message: 'Not found.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
 const deleteUser = (req: Request, res: Response) => {

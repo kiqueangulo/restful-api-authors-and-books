@@ -6,7 +6,7 @@ export interface IAuthor {
 
 export interface IAuthorModel extends IAuthor, Document {}
 
-const AuthorSchema = new Schema(
+const AuthorSchema = new Schema<IAuthorModel>(
     {
         name: { type: String, require: true }
     },

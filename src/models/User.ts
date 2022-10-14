@@ -13,7 +13,7 @@ export interface IUser {
 
 export interface IUserModel extends Omit<IUser, 'passwordConfirmation'>, Document {}
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<IUserModel>({
     username: { type: String, require: true, unique: true },
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
