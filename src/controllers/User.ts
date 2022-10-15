@@ -59,12 +59,16 @@ const updateUser = async (req: Request, res: Response) => {
     }
 };
 
-const deleteUser = (req: Request, res: Response) => {
-    const userId = req.params.userId;
+const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
 
-    return User.findByIdAndDelete(userId)
-        .then((user) => (user ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' })))
-        .catch((error) => res.status(500).json({ error }));
+        const deletedUser = await User.findByIdAndDelete(userId);
+
+        return deletedUser ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
 export default { createUser, readUser, readAllUsers, updateUser, deleteUser };
