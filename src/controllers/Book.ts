@@ -3,60 +3,72 @@ import mongoose from 'mongoose';
 
 import Book from '../models/Book';
 
-const createBook = (req: Request, res: Response) => {
-    const { title, author } = req.body;
+const createBook = async (req: Request, res: Response) => {
+    try {
+        const { title, author } = req.body;
 
-    const book = new Book({ _id: new mongoose.Types.ObjectId(), title, author });
+        const book = new Book({ _id: new mongoose.Types.ObjectId(), title, author });
 
-    return book
-        .save()
-        .then((book) => res.status(201).json({ book }))
-        .catch((error) => res.status(500).json({ error }));
+        await book.save();
+
+        return res.status(201).json({ book });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const readBook = (req: Request, res: Response) => {
-    const bookId = req.params.bookId;
+const readBook = async (req: Request, res: Response) => {
+    try {
+        const bookId = req.params.bookId;
 
-    return Book.findById(bookId)
-        .populate('author')
-        .select('-__v')
-        .then((book) => (book ? res.status(200).json({ book }) : res.status(404).json({ message: 'Not found.' })))
-        .catch((error) => res.status(500).json({ error }));
+        const book = await Book.findById(bookId).populate('author').select('-__v');
+
+        return book ? res.status(200).json({ book }) : res.status(404).json({ message: 'Not found.' });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const readAllBooks = (req: Request, res: Response) => {
-    return Book.find()
-        .populate('author')
-        .select('-__v')
-        .then((books) => res.status(200).json({ books }))
-        .catch((error) => res.status(500).json({ error }));
+const readAllBooks = async (req: Request, res: Response) => {
+    try {
+        const books = await Book.find().populate('author').select('-__v');
+
+        return res.status(200).json({ books });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const updateBook = (req: Request, res: Response) => {
-    const bookId = req.params.bookId;
+const updateBook = async (req: Request, res: Response) => {
+    try {
+        const bookId = req.params.bookId;
 
-    return Book.findById(bookId)
-        .then((book) => {
-            if (book) {
-                book.set(req.body);
+        const book = await Book.findById(bookId);
 
-                return book
-                    .save()
-                    .then((book) => res.status(201).json({ book }))
-                    .catch((error) => res.status(500).json({ error }));
-            } else {
-                res.status(404).json({ message: 'Not found.' });
-            }
-        })
-        .catch((error) => res.status(500).json({ error }));
+        if (book) {
+            book.set(req.body);
+
+            await book.save();
+
+            return res.status(201).json({ book });
+        } else {
+            res.status(404).json({ message: 'Not found.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
-const deleteBook = (req: Request, res: Response) => {
-    const bookId = req.params.bookId;
+const deleteBook = async (req: Request, res: Response) => {
+    try {
+        const bookId = req.params.bookId;
 
-    return Book.findByIdAndDelete(bookId)
-        .then((book) => (book ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' })))
-        .catch((error) => res.status(500).json({ error }));
+        const deletedBook = await Book.findByIdAndDelete(bookId);
+
+        return deletedBook ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 };
 
 export default { createBook, readBook, readAllBooks, updateBook, deleteBook };
