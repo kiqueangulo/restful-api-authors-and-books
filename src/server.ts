@@ -10,7 +10,7 @@ import { config } from './config/config';
 
 const router = express();
 
-const startServer = () => {
+const startServer = (): void => {
     router.use((req, res, next) => {
         /* Log the request */
         Logging.info(`Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
