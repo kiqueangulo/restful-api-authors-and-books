@@ -5,14 +5,14 @@ import ValidateSchema, { Schemas } from '../middleware/ValidateSchema';
 
 const router = express.Router();
 
-router.post('/', ValidateSchema(Schemas.book.create), controller.createBook);
+router.post('/', ValidateSchema(Schemas.book.create), controller.createBookHandler);
 
-router.get('/', controller.readAllBooks);
+router.get('/', controller.getAllBooksHandler);
 
-router.get('/:bookId', controller.readBook);
+router.get('/:bookId', controller.getBookHandler);
 
-router.put('/:bookId', ValidateSchema(Schemas.book.update), controller.updateBook);
+router.put('/:bookId', ValidateSchema(Schemas.book.update), controller.updateBookHandler);
 
-router.delete('/:bookId', controller.deleteBook);
+router.delete('/:bookId', controller.deleteBookHandler);
 
 export = router;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema } from 'joi';
 
-import Logging from '../library/Logging';
+import Logging from '../utils/Logging';
 import { IUser } from '../models/User';
 import { IAuthor } from '../models/Author';
 import { IBook } from '../models/Book';
