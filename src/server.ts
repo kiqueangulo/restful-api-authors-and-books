@@ -8,10 +8,10 @@ import authorRoutes from './routes/Author';
 import bookRoutes from './routes/Book';
 import { config } from './config/config';
 
-const router = express();
+const app = express();
 
 const startServer = (): void => {
-    router.use((req, res, next) => {
+    app.use((req, res, next) => {
         /* Log the request */
         Logging.info(`Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
 
@@ -23,11 +23,11 @@ const startServer = (): void => {
         next();
     });
 
-    router.use(express.urlencoded({ extended: true }));
-    router.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
 
     /* Rule of API */
-    router.use((req, res, next) => {
+    app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
@@ -41,15 +41,15 @@ const startServer = (): void => {
     });
 
     /* Routes */
-    router.use('/users', userRoutes);
-    router.use('/authors', authorRoutes);
-    router.use('/books', bookRoutes);
+    app.use('/users', userRoutes);
+    app.use('/authors', authorRoutes);
+    app.use('/books', bookRoutes);
 
     /* Healthcheck */
-    router.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
+    app.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
 
     /* Error handling */
-    router.use((req, res) => {
+    app.use((req, res) => {
         const error = new Error('Not found');
 
         Logging.error(error);
@@ -57,7 +57,7 @@ const startServer = (): void => {
         return res.status(404).json({ message: error.message });
     });
 
-    http.createServer(router).listen(config.server.port, () => Logging.info(`Server is running on port ${config.server.port}.`));
+    app.listen(config.server.port, () => Logging.info(`Server is running on port ${config.server.port}.`));
 };
 
 /* Connect to Mongo */
