@@ -1,27 +1,23 @@
 import { Request, Response } from 'express';
-import { omit } from 'lodash';
-import mongoose from 'mongoose';
 
 import User from '../models/User';
+import service from '../service/User';
 
-const createUser = async (req: Request, res: Response) => {
+const createUserHandler = async (req: Request, res: Response) => {
     try {
         const { username, email, password } = req.body;
 
-        const user = new User({ _id: new mongoose.Types.ObjectId(), username, email, password });
+        const user = await service.createUser({ username, email, password });
 
-        await user.save();
-
-        return res.status(201).send(omit(user.toJSON(), 'password'));
+        return res.status(201).json(user);
     } catch (error) {
         res.status(500).json({ error });
     }
 };
 
-const readUser = async (req: Request, res: Response) => {
+const getUserHandler = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
-        const user = await User.findById(userId);
+        const user = await service.getUser({ _id: req.params.userId });
 
         return user ? res.status(200).json({ user }) : res.status(404).json({ message: 'Not found.' });
     } catch (error) {
@@ -29,9 +25,9 @@ const readUser = async (req: Request, res: Response) => {
     }
 };
 
-const readAllUsers = async (req: Request, res: Response) => {
+const getAllUsersHandler = async (req: Request, res: Response) => {
     try {
-        const users = await User.find();
+        const users = await service.getAllUsers();
 
         return res.status(200).json({ users });
     } catch (error) {
@@ -39,36 +35,28 @@ const readAllUsers = async (req: Request, res: Response) => {
     }
 };
 
-const updateUser = async (req: Request, res: Response) => {
+const updateUserHandler = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
+        const user = await service.getUser({ _id: req.params.userId });
 
-        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: 'Not found.' });
 
-        if (user) {
-            user.set(req.body);
+        const userUpdated = await service.updateUser(user._id, req.body);
 
-            await user.save();
-
-            return res.status(201).json({ user });
-        } else {
-            return res.status(404).json({ message: 'Not found.' });
-        }
+        return res.status(201).json({ userUpdated });
     } catch (error) {
         res.status(500).json({ error });
     }
 };
 
-const deleteUser = async (req: Request, res: Response) => {
+const deleteUserHandler = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
+        const userDeleted = await service.deleteUser({ _id: req.params.userId });
 
-        const deletedUser = await User.findByIdAndDelete(userId);
-
-        return deletedUser ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' });
+        return userDeleted ? res.status(201).json({ message: 'Deleted' }) : res.status(404).json({ message: 'Not found.' });
     } catch (error) {
         res.status(500).json({ error });
     }
 };
 
-export default { createUser, readUser, readAllUsers, updateUser, deleteUser };
+export default { createUserHandler, getUserHandler, getAllUsersHandler, updateUserHandler, deleteUserHandler };

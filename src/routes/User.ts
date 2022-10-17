@@ -5,14 +5,14 @@ import ValidateSchema, { Schemas } from '../middleware/ValidateSchema';
 
 const router = express.Router();
 
-router.post('/', ValidateSchema(Schemas.user.create), controller.createUser);
+router.post('/', ValidateSchema(Schemas.user.create), controller.createUserHandler);
 
-router.get('/', controller.readAllUsers);
+router.get('/', controller.getAllUsersHandler);
 
-router.get('/:userId', controller.readUser);
+router.get('/:userId', controller.getUserHandler);
 
-router.put('/:userId', ValidateSchema(Schemas.user.update), controller.updateUser);
+router.put('/:userId', ValidateSchema(Schemas.user.update), controller.updateUserHandler);
 
-router.delete('/:userId', controller.deleteUser);
+router.delete('/:userId', controller.deleteUserHandler);
 
 export = router;
