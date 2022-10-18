@@ -2,7 +2,7 @@ import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mong
 
 import BookORM, { IBookModel } from '../models/book.model';
 
-async function createBook(input: DocumentDefinition<IBookModel>) {
+async function createBook(input: DocumentDefinition<Omit<IBookModel, 'users'>>) {
     return BookORM.create(input);
 }
 

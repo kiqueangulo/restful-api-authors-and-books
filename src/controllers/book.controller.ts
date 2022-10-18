@@ -4,9 +4,9 @@ import service from '../service/book.service';
 
 const createBookHandler = async (req: Request, res: Response) => {
     try {
-        const { title, author } = req.body;
+        const { title, author, description } = req.body;
 
-        const book = await service.createBook({ title, author });
+        const book = await service.createBook({ title, author, description });
 
         return res.status(201).json({ book });
     } catch (error) {

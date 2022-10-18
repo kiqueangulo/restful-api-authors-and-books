@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
-import Logging from './utils/Logging';
+import Logging from './utils/logging';
 import routes from './routes';
 import { config } from './config/config';
 

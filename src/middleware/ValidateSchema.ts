@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema } from 'joi';
 
-import Logging from '../utils/Logging';
+import Logging from '../utils/logging';
 import { IUser } from '../models/user.model';
-import { IAuthor } from '../models/Author';
 import { IBook } from '../models/book.model';
 
 export default function ValidateSchema(schema: ObjectSchema) {
@@ -39,27 +38,21 @@ export const Schemas = {
             passwordConfirmation: Joi.any()
                 .equal(Joi.ref('password'))
                 .label('Password confirmation')
-                .options({ messages: { 'any.only': '{{#label}} does not match' } })
-        })
-    },
-    author: {
-        create: Joi.object<IAuthor>({
-            name: Joi.string().required()
-        }),
-        update: Joi.object<IAuthor>({
-            name: Joi.string().required()
+                .options({ messages: { 'any.only': '{{#label}} does not match' } }),
+            books: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
         })
     },
     book: {
         create: Joi.object<IBook>({
-            author: Joi.string()
-                .regex(/^[0-9a-fA-F]{24}$/)
-                .required(),
-            title: Joi.string().required()
+            title: Joi.string().required(),
+            author: Joi.string().required(),
+            description: Joi.string()
         }),
         update: Joi.object<IBook>({
-            author: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
-            title: Joi.string()
+            title: Joi.string(),
+            author: Joi.string(),
+            description: Joi.string(),
+            users: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
         })
     }
 };

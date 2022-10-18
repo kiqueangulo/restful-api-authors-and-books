@@ -11,11 +11,13 @@ const sessionSchema = new Schema<ISessionModel>(
     {
         user: {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
         valid: {
             type: Boolean,
-            default: true
+            default: true,
+            required: true
         }
     },
     { timestamps: true }
