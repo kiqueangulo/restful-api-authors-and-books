@@ -2,15 +2,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGO_URL = process.env.MONGO_URL || '';
-
-const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337;
-
 export const config = {
     mongo: {
-        url: MONGO_URL
+        url: process.env.MONGO_URL || ''
     },
     server: {
-        port: SERVER_PORT
+        port: process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337
+    },
+    keys: {
+        private: process.env.PRIVATE_KEY,
+        public: process.env.PUBLIC_KEY
     }
 };
