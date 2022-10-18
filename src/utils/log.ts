@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-export default class Logging {
+export default class Log {
     public static log = (args: any) => this.info(args);
 
     public static info = (args: any) => console.log(chalk.bgBlueBright(`[${new Date().toLocaleString()}] [INFO]`), typeof args === 'string' ? chalk.blueBright(args) : args);

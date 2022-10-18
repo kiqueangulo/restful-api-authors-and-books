@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema } from 'joi';
 
-import Logging from '../utils/logging';
+import Log from '../utils/log';
 import { IUser } from '../models/user.model';
 import { IBook } from '../models/book.model';
 
@@ -12,7 +12,7 @@ export default function ValidateSchema(schema: ObjectSchema) {
 
             next();
         } catch (error) {
-            Logging.error(error);
+            Log.error(error);
 
             return res.status(422).json({ error });
         }
