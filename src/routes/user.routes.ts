@@ -1,9 +1,9 @@
-import express from 'express';
+import { Router } from 'express';
 
-import controller from '../controllers/User';
+import controller from '../controllers/user.controller';
 import ValidateSchema, { Schemas } from '../middleware/ValidateSchema';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/', ValidateSchema(Schemas.user.create), controller.createUserHandler);
 
@@ -15,4 +15,4 @@ router.put('/:userId', ValidateSchema(Schemas.user.update), controller.updateUse
 
 router.delete('/:userId', controller.deleteUserHandler);
 
-export = router;
+export default router;

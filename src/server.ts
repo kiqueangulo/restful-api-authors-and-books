@@ -2,9 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import Logging from './utils/Logging';
-import userRoutes from './routes/User';
+import userRoutes from './routes/user.routes';
+import sessionRoutes from './routes/session.routes';
 import authorRoutes from './routes/Author';
-import bookRoutes from './routes/Book';
+import bookRoutes from './routes/book.routes';
 import { config } from './config/config';
 
 const app = express();
@@ -41,6 +42,7 @@ const startServer = (): void => {
 
     /* Routes */
     app.use('/users', userRoutes);
+    app.use('/sessions', sessionRoutes);
     app.use('/authors', authorRoutes);
     app.use('/books', bookRoutes);
 
