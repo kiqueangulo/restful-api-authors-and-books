@@ -2,10 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import Logging from './utils/Logging';
-import userRoutes from './routes/user.routes';
-import sessionRoutes from './routes/session.routes';
-import authorRoutes from './routes/Author';
-import bookRoutes from './routes/book.routes';
+import routes from './routes';
 import { config } from './config/config';
 
 const app = express();
@@ -40,14 +37,7 @@ const startServer = (): void => {
         next();
     });
 
-    /* Routes */
-    app.use('/users', userRoutes);
-    app.use('/sessions', sessionRoutes);
-    app.use('/authors', authorRoutes);
-    app.use('/books', bookRoutes);
-
-    /* Healthcheck */
-    app.get('/ping', (req, res) => res.status(200).json({ message: 'API working' }));
+    routes(app);
 
     /* Error handling */
     app.use((req, res) => {
