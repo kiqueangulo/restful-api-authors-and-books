@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import service from '../service/Book';
+import service from '../service/book.service';
 
 const createBookHandler = async (req: Request, res: Response) => {
     try {

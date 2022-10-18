@@ -7,7 +7,7 @@ export interface IBook {
 
 export interface IBookModel extends IBook, Document {}
 
-const BookSchema = new Schema<IBookModel>(
+const bookSchema = new Schema<IBookModel>(
     {
         title: { type: String, require: true },
         author: { type: Schema.Types.ObjectId, require: true, ref: 'Author' }
@@ -17,4 +17,4 @@ const BookSchema = new Schema<IBookModel>(
     }
 );
 
-export default mongoose.model<IBookModel>('Book', BookSchema);
+export default mongoose.model<IBookModel>('Book', bookSchema);
