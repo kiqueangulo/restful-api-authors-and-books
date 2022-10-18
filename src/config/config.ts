@@ -10,7 +10,7 @@ export const config = {
         port: process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337
     },
     keys: {
-        private: process.env.PRIVATE_KEY,
-        public: process.env.PUBLIC_KEY
+        private: process.env.PRIVATE_KEY || '',
+        public: process.env.PUBLIC_KEY || ''
     }
 };
