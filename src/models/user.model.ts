@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, HydratedDocument } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import { IBookModel } from './Book';
+import { IBookModel } from './book.model';
 
 export interface IUser {
     username: string;
@@ -13,14 +13,14 @@ export interface IUser {
 
 export interface IUserModel extends Omit<IUser, 'passwordConfirmation'>, Document {}
 
-const UserSchema = new Schema<IUserModel>({
+const userSchema = new Schema<IUserModel>({
     username: { type: String, require: true, unique: true },
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true },
     books: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
 });
 
-UserSchema.pre<HydratedDocument<IUserModel>>('save', async function (next) {
+userSchema.pre<HydratedDocument<IUserModel>>('save', async function (next) {
     const user = this as IUserModel;
 
     if (!user.isModified('password')) return next();
@@ -32,4 +32,4 @@ UserSchema.pre<HydratedDocument<IUserModel>>('save', async function (next) {
     return next();
 });
 
-export default mongoose.model<IUserModel>('User', UserSchema);
+export default mongoose.model<IUserModel>('User', userSchema);

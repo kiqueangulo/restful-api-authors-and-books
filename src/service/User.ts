@@ -1,7 +1,7 @@
 import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { omit } from 'lodash';
 
-import User, { IUserModel } from '../models/User';
+import User, { IUserModel } from '../models/user.model';
 
 async function createUser(input: DocumentDefinition<Omit<IUserModel, 'books'>>) {
     try {

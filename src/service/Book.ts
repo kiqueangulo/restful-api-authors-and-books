@@ -1,6 +1,6 @@
 import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 
-import Book, { IBookModel } from '../models/Book';
+import Book, { IBookModel } from '../models/book.model';
 
 async function createBook(input: DocumentDefinition<IBookModel>) {
     return Book.create(input);

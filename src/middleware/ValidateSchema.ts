@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import Joi, { ObjectSchema } from 'joi';
 
 import Logging from '../utils/Logging';
-import { IUser } from '../models/User';
+import { IUser } from '../models/user.model';
 import { IAuthor } from '../models/Author';
-import { IBook } from '../models/Book';
+import { IBook } from '../models/book.model';
 
 export default function ValidateSchema(schema: ObjectSchema) {
     return async (req: Request, res: Response, next: NextFunction) => {
