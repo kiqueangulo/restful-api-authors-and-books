@@ -3,7 +3,7 @@ import { omit } from "lodash";
 
 import UserORM, { IUserModel } from "../models/user.model";
 
-async function createUser(input: DocumentDefinition<Omit<IUserModel, "books">>) {
+async function createUser(input: DocumentDefinition<Omit<IUserModel, "books" | "addBook">>) {
     try {
         const newUser = await UserORM.create(input);
 

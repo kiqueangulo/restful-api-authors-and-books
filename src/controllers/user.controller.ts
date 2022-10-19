@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import service from "../service/user.service";
+import bookService from "../service/book.service";
 
 const createUserHandler = async (req: Request, res: Response) => {
     try {
@@ -58,4 +59,30 @@ const deleteUserHandler = async (req: Request, res: Response) => {
     }
 };
 
-export default { createUserHandler, getUserHandler, getAllUsersHandler, updateUserHandler, deleteUserHandler };
+const addBookHandler = async (req: Request, res: Response) => {
+    try {
+        const user = await service.getUser({ _id: req.params.userId });
+        console.log("This is the user: ", user);
+
+        if (!user) return res.status(404).json({ message: "Not found." });
+
+        const book = await bookService.getBook({ _id: req.params.bookId });
+        console.log("This is the book: ", book);
+
+        if (!book) return res.status(404).json({ message: "Not found." });
+        console.log("Before adding the book to the user");
+
+        user.addBook(book._id);
+        console.log("After adding the book to the user");
+
+        book.addUser(user._id);
+
+        // return res.status(201).redirect(308, `/${req.params.bookId}`)
+        return res.status(201).send({ user, book });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error });
+    }
+};
+
+export default { createUserHandler, getUserHandler, getAllUsersHandler, updateUserHandler, deleteUserHandler, addBookHandler };

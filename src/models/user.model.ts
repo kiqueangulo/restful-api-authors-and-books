@@ -11,7 +11,9 @@ export interface IUser {
     books: Array<IBookModel["_id"]>;
 }
 
-export interface IUserModel extends Omit<IUser, "passwordConfirmation">, Document {}
+export interface IUserModel extends Omit<IUser, "passwordConfirmation">, Document {
+    addBook(bookId: IBookModel["_id"]): Promise<void>;
+}
 
 const userSchema = new Schema<IUserModel>({
     username: { type: String, require: true, unique: true },
@@ -31,5 +33,20 @@ userSchema.pre<HydratedDocument<IUserModel>>("save", async function (next) {
 
     return next();
 });
+
+userSchema.methods.addBook = async function (bookId: IBookModel["_id"]) {
+    console.log("Before assigning the const user");
+
+    const user = this as IUserModel;
+    console.log("Before the bookId is there");
+
+    if (user.books?.includes(bookId)) return;
+    console.log("Before pushing the bookId");
+
+    user.books.push(bookId);
+    await user.save();
+
+    return;
+};
 
 export default mongoose.model<IUserModel>("User", userSchema);
