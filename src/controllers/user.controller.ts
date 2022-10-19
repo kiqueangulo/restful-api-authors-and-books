@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import service from "../service/user.service";
 import bookService from "../service/book.service";
+// import userManageBooks from "../utils/userManageBooks";
 
 const createUserHandler = async (req: Request, res: Response) => {
     try {
@@ -73,9 +74,12 @@ const addBookHandler = async (req: Request, res: Response) => {
         console.log("Before adding the book to the user");
 
         user.addBook(book._id);
-        console.log("After adding the book to the user");
 
+        console.log("After adding the book to the user");
         book.addUser(user._id);
+
+        // await userManageBooks.addToList(user, book);
+        console.log("After adding the user to the book");
 
         // return res.status(201).redirect(308, `/${req.params.bookId}`)
         return res.status(201).send({ user, book });

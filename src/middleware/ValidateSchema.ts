@@ -19,9 +19,13 @@ export default function Validate(schema: ObjectSchema) {
     };
 }
 
+interface IUserSchema extends IUser {
+    passwordConfirmation: string;
+}
+
 export const Schemas = {
     user: {
-        create: Joi.object<IUser>({
+        create: Joi.object<IUserSchema>({
             username: Joi.string().required(),
             email: Joi.string().email().required(),
             password: Joi.string().min(6).required().label("Password"),
@@ -31,7 +35,7 @@ export const Schemas = {
                 .label("Password confirmation")
                 .options({ messages: { "any.only": "{{#label}} does not match" } })
         }),
-        update: Joi.object<IUser>({
+        update: Joi.object<IUserSchema>({
             username: Joi.string(),
             email: Joi.string().email(),
             password: Joi.string().min(6).label("Password"),

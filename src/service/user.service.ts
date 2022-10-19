@@ -1,9 +1,9 @@
-import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery, Types } from "mongoose";
+import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 import { omit } from "lodash";
 
-import UserORM, { IUserModel } from "../models/user.model";
+import UserORM, { IUser } from "../models/user.model";
 
-async function createUser(input: DocumentDefinition<Omit<IUserModel, "books" | "addBook">>) {
+async function createUser(input: DocumentDefinition<Omit<IUser, "books" | "addBook">>) {
     try {
         const newUser = await UserORM.create(input);
 
@@ -13,7 +13,7 @@ async function createUser(input: DocumentDefinition<Omit<IUserModel, "books" | "
     }
 }
 
-async function getUser(query: FilterQuery<IUserModel>, options: QueryOptions = { lean: true }) {
+async function getUser(query: FilterQuery<IUser>, options: QueryOptions = { lean: true }) {
     try {
         const user = await UserORM.findOne(query, { __v: false, password: false }, options);
 
@@ -23,7 +23,7 @@ async function getUser(query: FilterQuery<IUserModel>, options: QueryOptions = {
     }
 }
 
-async function getAllUsers(query: FilterQuery<IUserModel> = {}, options: QueryOptions = { lean: true }) {
+async function getAllUsers(query: FilterQuery<IUser> = {}, options: QueryOptions = { lean: true }) {
     try {
         const users = await UserORM.find(query, { __v: false, password: false }, options);
 
@@ -33,15 +33,20 @@ async function getAllUsers(query: FilterQuery<IUserModel> = {}, options: QueryOp
     }
 }
 
-async function updateUser(query: FilterQuery<IUserModel>, update: UpdateQuery<IUserModel>, options: QueryOptions = { new: true }) {
+async function updateUser(query: FilterQuery<IUser>, update: UpdateQuery<IUser>) {
     try {
-        return UserORM.findOneAndUpdate(query, update, options);
+        const user = await UserORM.findOne(query);
+
+        user?.set(update);
+        await user?.save();
+
+        return user;
     } catch (error: any) {
         throw new Error(error);
     }
 }
 
-async function deleteUser(query: FilterQuery<IUserModel>) {
+async function deleteUser(query: FilterQuery<IUser>) {
     try {
         return UserORM.findOneAndDelete(query);
     } catch (error: any) {

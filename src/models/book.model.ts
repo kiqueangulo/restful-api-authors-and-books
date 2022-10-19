@@ -1,19 +1,20 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-import { IUserModel } from "./user.model";
+import { IUser } from "./user.model";
 
-export interface IBook {
+export interface IBook extends Document {
     title: string;
     author: Array<string>;
     description: string;
-    users: Array<IUserModel["_id"]>;
+    users: Array<IUser["_id"]>;
+    addUser(userId: IUser["_id"]): Promise<void>;
 }
 
-export interface IBookModel extends IBook, Document {
-    addUser: (userId: IUserModel["_id"]) => Promise<void>;
-}
+// export interface IBookModel extends IBook, Document {
+//     addUser: (userId: IUser["_id"]) => Promise<void>;
+// }
 
-const bookSchema = new Schema<IBookModel>(
+const bookSchema = new Schema<IBook>(
     {
         title: { type: String, require: true },
         author: [{ type: String, required: true }],
@@ -25,8 +26,8 @@ const bookSchema = new Schema<IBookModel>(
     }
 );
 
-bookSchema.methods.addUser = async function (userId: IUserModel["_id"]) {
-    const book = this as IBookModel;
+bookSchema.methods.addUser = async function (userId: IUser["_id"]) {
+    const book = this as IBook;
 
     if (book.users?.includes(userId)) return;
 
@@ -36,4 +37,4 @@ bookSchema.methods.addUser = async function (userId: IUserModel["_id"]) {
     return;
 };
 
-export default mongoose.model<IBookModel>("Book", bookSchema);
+export default mongoose.model<IBook>("Book", bookSchema);

@@ -1,9 +1,9 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
-import { IUserModel } from './user.model';
+import { IUser } from "./user.model";
 
 export interface ISessionModel extends Document {
-    user: IUserModel['_id'];
+    user: IUser["_id"];
     valid: boolean;
 }
 
@@ -11,7 +11,7 @@ const sessionSchema = new Schema<ISessionModel>(
     {
         user: {
             type: Schema.Types.ObjectId,
-            ref: 'User',
+            ref: "User",
             required: true
         },
         valid: {
@@ -23,4 +23,4 @@ const sessionSchema = new Schema<ISessionModel>(
     { timestamps: true }
 );
 
-export default mongoose.model<ISessionModel>('Session', sessionSchema);
+export default mongoose.model<ISessionModel>("Session", sessionSchema);
