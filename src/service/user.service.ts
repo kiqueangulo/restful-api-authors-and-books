@@ -1,13 +1,13 @@
-import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
-import { omit } from 'lodash';
+import { DocumentDefinition, FilterQuery, QueryOptions, UpdateQuery, Types } from "mongoose";
+import { omit } from "lodash";
 
-import UserORM, { IUserModel } from '../models/user.model';
+import UserORM, { IUserModel } from "../models/user.model";
 
-async function createUser(input: DocumentDefinition<Omit<IUserModel, 'books'>>) {
+async function createUser(input: DocumentDefinition<Omit<IUserModel, "books">>) {
     try {
         const newUser = await UserORM.create(input);
 
-        return omit(newUser.toJSON(), 'password');
+        return omit(newUser.toJSON(), "password");
     } catch (error: any) {
         throw new Error(error);
     }

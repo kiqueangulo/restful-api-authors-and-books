@@ -9,7 +9,7 @@ function routes(app: Express) {
     app.use('/api/v1/sessions', sessionRouter);
     app.use('/api/v1/books', bookRouter);
 
-    app.get('/api/v1/ping', (req, res) => res.status(200).json({ message: 'API working' }));
+    app.get('/api/v1/ping', (req: Request, res: Response) => res.status(200).json({ message: 'API working' }));
 }
 
 export default routes;

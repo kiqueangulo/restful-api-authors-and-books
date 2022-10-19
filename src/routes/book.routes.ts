@@ -1,17 +1,17 @@
 import { Router } from 'express';
 
 import controller from '../controllers/book.controller';
-import ValidateSchema, { Schemas } from '../middleware/validateSchema';
+import Validate, { Schemas } from '../middleware/validateSchema';
 
 const router = Router();
 
-router.post('/', ValidateSchema(Schemas.book.create), controller.createBookHandler);
+router.post('/', Validate(Schemas.book.create), controller.createBookHandler);
 
 router.get('/', controller.getAllBooksHandler);
 
 router.get('/:bookId', controller.getBookHandler);
 
-router.put('/:bookId', ValidateSchema(Schemas.book.update), controller.updateBookHandler);
+router.put('/:bookId', Validate(Schemas.book.update), controller.updateBookHandler);
 
 router.delete('/:bookId', controller.deleteBookHandler);
 

@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
-import Joi, { ObjectSchema } from 'joi';
+import { Request, Response, NextFunction } from "express";
+import Joi, { ObjectSchema } from "joi";
 
-import Log from '../utils/log';
-import { IUser } from '../models/user.model';
-import { IBook } from '../models/book.model';
+import Log from "../utils/log";
+import { IUser } from "../models/user.model";
+import { IBook } from "../models/book.model";
 
-export default function ValidateSchema(schema: ObjectSchema) {
+export default function Validate(schema: ObjectSchema) {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await schema.validateAsync(req.body);
@@ -24,21 +24,21 @@ export const Schemas = {
         create: Joi.object<IUser>({
             username: Joi.string().required(),
             email: Joi.string().email().required(),
-            password: Joi.string().min(6).required().label('Password'),
+            password: Joi.string().min(6).required().label("Password"),
             passwordConfirmation: Joi.any()
-                .equal(Joi.ref('password'))
+                .equal(Joi.ref("password"))
                 .required()
-                .label('Password confirmation')
-                .options({ messages: { 'any.only': '{{#label}} does not match' } })
+                .label("Password confirmation")
+                .options({ messages: { "any.only": "{{#label}} does not match" } })
         }),
         update: Joi.object<IUser>({
             username: Joi.string(),
             email: Joi.string().email(),
-            password: Joi.string().min(6).label('Password'),
+            password: Joi.string().min(6).label("Password"),
             passwordConfirmation: Joi.any()
-                .equal(Joi.ref('password'))
-                .label('Password confirmation')
-                .options({ messages: { 'any.only': '{{#label}} does not match' } }),
+                .equal(Joi.ref("password"))
+                .label("Password confirmation")
+                .options({ messages: { "any.only": "{{#label}} does not match" } }),
             books: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
         })
     },
