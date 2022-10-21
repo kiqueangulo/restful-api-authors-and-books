@@ -11,6 +11,12 @@ export interface IUser extends Document {
     addBook(bookId: IBook["_id"]): Promise<void>;
 }
 
+export type TUser =
+    | (IUser & {
+          _id: Schema.Types.ObjectId;
+      })
+    | null;
+
 const userSchema = new Schema<Omit<IUser, "passwordConfirmation">>({
     username: { type: String, require: true, unique: true },
     email: { type: String, require: true, unique: true },

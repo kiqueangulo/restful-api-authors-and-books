@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import service from "../service/user.service";
 import bookService from "../service/book.service";
+import { IUser } from "../models/user.model";
 // import userManageBooks from "../utils/userManageBooks";
 
 const createUserHandler = async (req: Request, res: Response) => {
@@ -65,6 +66,8 @@ const addBookHandler = async (req: Request, res: Response) => {
         const user = await service.getUser({ _id: req.params.userId });
         console.log("This is the user: ", user);
 
+        const userTwo = <IUser>user;
+
         if (!user) return res.status(404).json({ message: "Not found." });
 
         const book = await bookService.getBook({ _id: req.params.bookId });
@@ -73,7 +76,7 @@ const addBookHandler = async (req: Request, res: Response) => {
         if (!book) return res.status(404).json({ message: "Not found." });
         console.log("Before adding the book to the user");
 
-        user.addBook(book._id);
+        userTwo.addBook(book._id);
 
         console.log("After adding the book to the user");
         book.addUser(user._id);
