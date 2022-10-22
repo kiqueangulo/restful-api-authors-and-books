@@ -10,7 +10,7 @@ export default function Validate(schema: ObjectSchema) {
         try {
             await schema.validateAsync(req.body);
 
-            next();
+            return next();
         } catch (error) {
             Log.error(error);
 

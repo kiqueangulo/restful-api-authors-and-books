@@ -9,20 +9,54 @@ export interface IUser extends Document {
     password: string;
     books: Array<IBook["_id"]>;
     addBook(bookId: IBook["_id"]): Promise<void>;
+    testMethod(): void;
 }
 
-export type TUser =
-    | (IUser & {
-          _id: Schema.Types.ObjectId;
-      })
-    | null;
+const userSchema = new Schema<Omit<IUser, "passwordConfirmation">>(
+    {
+        username: {
+            type: String,
+            require: true,
+            unique: true
+        },
+        email: {
+            type: String,
+            require: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            require: true
+        },
+        books: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Book"
+            }
+        ]
+    },
+    {
+        methods: {
+            async addBook(bookId: IBook["_id"]): Promise<void> {
+                console.log("Before assigning the const user");
 
-const userSchema = new Schema<Omit<IUser, "passwordConfirmation">>({
-    username: { type: String, require: true, unique: true },
-    email: { type: String, require: true, unique: true },
-    password: { type: String, require: true },
-    books: [{ type: Schema.Types.ObjectId, ref: "Book" }]
-});
+                const user = this;
+                console.log("Before the bookId is there");
+
+                if (user.books?.includes(bookId)) return;
+                console.log("Before pushing the bookId");
+
+                user.books.push(bookId);
+                await user.save();
+
+                return;
+            },
+            testMethod(): void {
+                console.log("testMethod works");
+            }
+        }
+    }
+);
 
 userSchema.pre<HydratedDocument<IUser>>("save", async function (next) {
     const user = this as IUser;
@@ -35,20 +69,5 @@ userSchema.pre<HydratedDocument<IUser>>("save", async function (next) {
 
     return next();
 });
-
-userSchema.methods.addBook = async function (bookId: IBook["_id"]) {
-    console.log("Before assigning the const user");
-
-    const user = this as IUser;
-    console.log("Before the bookId is there");
-
-    if (user.books?.includes(bookId)) return;
-    console.log("Before pushing the bookId");
-
-    user.books.push(bookId);
-    await user.save();
-
-    return;
-};
 
 export default mongoose.model<IUser>("User", userSchema);

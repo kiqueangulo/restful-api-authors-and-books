@@ -13,7 +13,7 @@ const createUserHandler = async (req: Request, res: Response) => {
 
         return res.status(201).json(user);
     } catch (error) {
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
@@ -23,7 +23,7 @@ const getUserHandler = async (req: Request, res: Response) => {
 
         return user ? res.status(200).json({ user }) : res.status(404).json({ message: "Not found." });
     } catch (error) {
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
@@ -33,7 +33,7 @@ const getAllUsersHandler = async (req: Request, res: Response) => {
 
         return res.status(200).json({ users });
     } catch (error) {
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
@@ -47,7 +47,7 @@ const updateUserHandler = async (req: Request, res: Response) => {
 
         return res.status(201).json({ userUpdated });
     } catch (error) {
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
@@ -57,7 +57,7 @@ const deleteUserHandler = async (req: Request, res: Response) => {
 
         return userDeleted ? res.status(201).json({ message: "Deleted" }) : res.status(404).json({ message: "Not found." });
     } catch (error) {
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
@@ -66,8 +66,6 @@ const addBookHandler = async (req: Request, res: Response) => {
         const user = await service.getUser({ _id: req.params.userId });
         console.log("This is the user: ", user);
 
-        const userTwo = <IUser>user;
-
         if (!user) return res.status(404).json({ message: "Not found." });
 
         const book = await bookService.getBook({ _id: req.params.bookId });
@@ -75,8 +73,9 @@ const addBookHandler = async (req: Request, res: Response) => {
 
         if (!book) return res.status(404).json({ message: "Not found." });
         console.log("Before adding the book to the user");
+        user.testMethod();
 
-        userTwo.addBook(book._id);
+        user.addBook(book._id);
 
         console.log("After adding the book to the user");
         book.addUser(user._id);
@@ -88,7 +87,7 @@ const addBookHandler = async (req: Request, res: Response) => {
         return res.status(201).send({ user, book });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error });
+        return res.status(500).json({ error });
     }
 };
 
