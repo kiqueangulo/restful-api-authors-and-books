@@ -10,6 +10,7 @@ const createBookHandler = async (req: Request, res: Response) => {
 
         return res.status(201).json({ book });
     } catch (error) {
+        console.error(error);
         return res.status(500).json({ error });
     }
 };

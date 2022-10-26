@@ -49,12 +49,12 @@ export const Schemas = {
     book: {
         create: Joi.object<IBook>({
             title: Joi.string().required(),
-            author: Joi.string().required(),
+            author: Joi.array().items(Joi.string()).required(),
             description: Joi.string()
         }),
         update: Joi.object<IBook>({
             title: Joi.string(),
-            author: Joi.string(),
+            author: Joi.array().items(Joi.string()),
             description: Joi.string(),
             users: Joi.array().items(Joi.string().regex(/^[0-9a-fA-F]{24}$/))
         })

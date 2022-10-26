@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 
 import service from "../service/user.service";
 import bookService from "../service/book.service";
-import { IUser } from "../models/user.model";
-// import userManageBooks from "../utils/userManageBooks";
 
 const createUserHandler = async (req: Request, res: Response) => {
     try {
@@ -64,27 +62,18 @@ const deleteUserHandler = async (req: Request, res: Response) => {
 const addBookHandler = async (req: Request, res: Response) => {
     try {
         const user = await service.getUser({ _id: req.params.userId });
-        console.log("This is the user: ", user);
 
         if (!user) return res.status(404).json({ message: "Not found." });
 
-        const book = await bookService.getBook({ _id: req.params.bookId });
-        console.log("This is the book: ", book);
+        const book = await bookService.getBook({ _id: req.query.bookId });
 
         if (!book) return res.status(404).json({ message: "Not found." });
-        console.log("Before adding the book to the user");
-        user.testMethod();
 
-        user.addBook(book._id);
+        const userUpdated = await service.updateUser(user._id, { books: [...user.books, book._id] });
 
-        console.log("After adding the book to the user");
-        book.addUser(user._id);
+        const bookUpdated = await bookService.updateBook(book._id, { users: [...book.users, user._id] });
 
-        // await userManageBooks.addToList(user, book);
-        console.log("After adding the user to the book");
-
-        // return res.status(201).redirect(308, `/${req.params.bookId}`)
-        return res.status(201).send({ user, book });
+        return res.status(201).send({ userUpdated, bookUpdated });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error });

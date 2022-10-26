@@ -14,7 +14,7 @@ router.get("/:userId", controller.getUserHandler);
 
 router.put("/:userId", Validate(Schemas.user.update), controller.updateUserHandler);
 
-router.put("/:userId/:bookId", controller.addBookHandler);
+router.put("/:userId/books", controller.addBookHandler);
 
 router.delete("/:userId", controller.deleteUserHandler);
 
